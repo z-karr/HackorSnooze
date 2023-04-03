@@ -155,6 +155,8 @@ class User {
             url: `${BASE_URL}/signup`,
             method: "POST",
             data: { user: { username, password, name } },
+            // headers: {"Accept-Language": "FR"} 
+                // Example of incorporating accessibility for user and their native language, if API accepts it. example French
         });
 
         let { user } = response.data;

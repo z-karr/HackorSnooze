@@ -20,12 +20,17 @@ async function login(evt) {
 
     // User.login retrieves user info from API and returns User instance
     // which we'll make the globally-available, logged-in user.
-    currentUser = await User.login(username, password);
+    // try/catch to catch any http errors and show alert upon attempted login, such as 401: Invalid Creds, 
+    try {
+        currentUser = await User.login(username, password);
 
-    $loginForm.trigger("reset");
+        $loginForm.trigger("reset");
 
-    saveUserCredentialsInLocalStorage();
-    updateUIOnUserLogin();
+        saveUserCredentialsInLocalStorage();
+        updateUIOnUserLogin();
+    } catch (error) {
+        alert(error?.response?.data?.error?.message)
+    }
 }
 
 $loginForm.on("submit", login);
@@ -42,12 +47,18 @@ async function signup(evt) {
 
     // User.signup retrieves user info from API and returns User instance
     // which we'll make the globally-available, logged-in user.
-    currentUser = await User.signup(username, password, name);
+    // try/catch to catch any errors and show alert upon sign up, such as 409: Conflict where Cred already taken 
+    try {
+        currentUser = await User.signup(username, password, name);
 
-    saveUserCredentialsInLocalStorage();
-    updateUIOnUserLogin();
+        saveUserCredentialsInLocalStorage();
+        updateUIOnUserLogin();
 
-    $signupForm.trigger("reset");
+        $signupForm.trigger("reset");
+
+    } catch (error) {
+        alert(error?.response?.data?.error?.message || "Something went wrong") //incase any undefined, check each step of the way.
+    }
 }
 
 $signupForm.on("submit", signup);
